@@ -7,6 +7,8 @@ Nullsec S1-ZK v1 is deterministic static analysis for ZK circuit auditing. It is
 - The Halo2 frontend is best-effort Rust source scanning. It is not a full Rust AST, MIR, or Halo2 synthesis analyzer.
 - The Halo2 constraint graph is approximate. It links obvious gates, regions, advice assignments, selector enables, equality/copy edges, lookups, and instance bindings, but it does not execute synthesis code.
 - It is not full formal verification and does not prove circuit soundness.
+- The `--deep` proof obligation layer infers likely obligations from naming, graph relationships, and source structure. These inferred obligations may be wrong, incomplete, or project-specific.
+- Exploit hypotheses are deterministic audit aids, not generated counterexamples and not proof of exploitability.
 - It may miss semantic bugs that require protocol context, cross-circuit reasoning, or full compilation.
 - It does not generate witnesses or counterexamples yet.
 - It does not compile Circom circuits, inspect generated R1CS, or run Halo2 circuit synthesis yet.

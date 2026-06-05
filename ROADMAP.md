@@ -10,6 +10,7 @@ Nullsec S1-ZK is designed as a modular security product foundation.
 - Plonky2 frontend.
 - R1CS extraction and analysis.
 - Constraint graph visualization.
+- Proof obligation visualization and reviewer workflow.
 - Witness counterexample generation.
 - Spec-to-circuit comparison.
 - LLM-assisted exploit reasoning.

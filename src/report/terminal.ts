@@ -31,6 +31,32 @@ ${issue.confidence}
 `;
 }
 
+function renderDeepAnalysis(result: AuditResult): string {
+  const deep = result.deepAnalysis;
+  if (!deep) return "";
+  const summary = deep.proofObligationSummary;
+  const criticalHypotheses = deep.exploitHypotheses.slice(0, 5);
+  return `
+Proof obligations:
+Total      ${summary.total}
+Satisfied  ${summary.satisfied}
+Partial    ${summary.partially_satisfied}
+Missing    ${summary.missing}
+Unknown    ${summary.unknown}
+
+${criticalHypotheses
+  .map(
+    (hypothesis) => `Exploit hypothesis for ${hypothesis.issueId}:
+${hypothesis.hypothesis}
+Broken assumption:
+${hypothesis.brokenAssumption}
+Patch direction:
+${hypothesis.patchDirection}
+`
+  )
+  .join("\n")}`;
+}
+
 export function renderTerminalReport(result: AuditResult): string {
   return `${chalk.bold("Nullsec S1-ZK")}
 AI-native auditing for zero-knowledge circuits
@@ -48,6 +74,7 @@ MEDIUM    ${result.summary.MEDIUM}
 LOW       ${result.summary.LOW}
 INFO      ${result.summary.INFO}
 
+${renderDeepAnalysis(result)}
 ${result.issues.map(renderIssue).join("\n")}
 ${result.parserWarnings.length > 0 ? `Parser warnings: ${result.parserWarnings.length}\n` : ""}`;
 }

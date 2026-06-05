@@ -2,6 +2,12 @@
 
 Each rule reports a deterministic static-analysis finding. Severity can be overridden in `.nullsec-zk.json`.
 
+## Deep Analysis Layer
+
+`nullsec-zk scan --deep` adds relationship-aware analysis on top of rule findings. It infers likely proof obligations, checks them against parsed Circom constraints and the Halo2 constraint graph, tracks taint/dataflow paths, and generates deterministic exploit hypotheses for high-impact findings.
+
+This layer is not a formal proof system. Obligations are inferred from circuit structure, names, public bindings, and graph relationships, so they may be incomplete or incorrect. The goal is to help auditors find likely semantic gaps faster.
+
 ## NS-ZK-001 Dangerous Hint Assignment
 
 Severity: CRITICAL when unconstrained, MEDIUM when later constrained.

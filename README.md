@@ -44,6 +44,18 @@ The Halo2 frontend builds a best-effort constraint graph from Rust source. It li
 
 This graph lets Nullsec S1-ZK distinguish advice values that are connected through gates, equality edges, lookups, or public instance exposure from values that are merely assigned in a region. It improves high-signal findings for Orchard-style EC gadgets and other Halo2 circuits, but it is still static source analysis, not formal verification or complete Halo2 synthesis.
 
+## Deep Relationship Analysis
+
+Use `--deep` to enable proof obligation extraction, relation checking, taint/dataflow analysis, and deterministic exploit hypotheses.
+
+```bash
+nullsec-zk scan ./circuits --deep
+```
+
+Deep analysis infers likely obligations such as commitment binding, nullifier binding, Merkle path binding, selector booleanity, EC multiplication consistency, public input binding, and range constraints. It then checks whether parsed constraints, Halo2 graph edges, equality/copy edges, lookups, and public instance bindings appear to support those obligations.
+
+This is relationship-aware static analysis. It helps auditors find gaps faster, but inferred obligations may be wrong or incomplete and are not formal proof obligations in the mathematical verification sense.
+
 ## Installation
 
 ```bash
@@ -57,6 +69,7 @@ npm link
 ```bash
 nullsec-zk scan ./examples
 nullsec-zk scan ./examples/halo2
+nullsec-zk scan ./benchmarks/historical/orchard-inspired --deep
 nullsec-zk scan ./examples --format json
 nullsec-zk scan ./examples --format sarif
 nullsec-zk scan ./examples --report markdown
@@ -138,7 +151,7 @@ Example:
 
 ## Limitations
 
-Static analysis is approximate. The Circom and Halo2 frontends are best-effort source analyzers, do not compile circuits, do not generate witnesses, and do not perform formal verification. See `LIMITATIONS.md`.
+Static analysis is approximate. The Circom and Halo2 frontends are best-effort source analyzers, and `--deep` infers likely proof obligations from naming and graph relationships. Nullsec S1-ZK does not compile circuits, generate witnesses, or perform formal verification. See `LIMITATIONS.md`.
 
 ## Roadmap
 

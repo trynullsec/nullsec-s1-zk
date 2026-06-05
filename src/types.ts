@@ -6,6 +6,15 @@ export type AssignmentOperator = "<--" | "<==";
 export type ConstraintOperator = "===" | "<==";
 export type OutputFormat = "terminal" | "json" | "markdown" | "sarif";
 export type FrontendName = "Circom" | "Halo2" | "Mixed";
+export type ProofObligationType =
+  | "commitment_binding"
+  | "nullifier_binding"
+  | "merkle_root_binding"
+  | "selector_booleanity"
+  | "ec_multiplication"
+  | "public_input_binding"
+  | "range_constraint";
+export type RelationStatus = "satisfied" | "partially_satisfied" | "missing" | "unknown";
 
 export interface SourceLocation {
   file: string;
@@ -180,6 +189,7 @@ export interface AuditResult {
   summary: AuditSummary;
   issues: Issue[];
   parserWarnings: ParserWarning[];
+  deepAnalysis?: DeepAnalysisResult;
 }
 
 export interface ScanOptions {
@@ -188,4 +198,65 @@ export interface ScanOptions {
   out?: string;
   failOn?: Severity;
   configPath?: string;
+  deep?: boolean;
+}
+
+export interface ProofObligation {
+  id: string;
+  type: ProofObligationType;
+  subject: string;
+  requiredInputs: string[];
+  expectedRelation: string;
+  relatedSignals: string[];
+  confidence: Confidence;
+  sourceLocation: SourceLocation;
+}
+
+export interface RelationCheckResult {
+  obligationId: string;
+  status: RelationStatus;
+  evidence: string[];
+  missing: string[];
+  explanation: string;
+}
+
+export interface TaintFlowPath {
+  id: string;
+  source: string;
+  sink: string;
+  path: string[];
+  constrained: boolean;
+  support: string[];
+  risk: "untrusted_to_output" | "public_binding_without_relation" | "ec_unconnected_coordinate";
+  confidence: Confidence;
+  sourceLocation?: SourceLocation;
+}
+
+export interface ExploitHypothesis {
+  issueId: string;
+  relatedObligationId?: string;
+  hypothesis: string;
+  attackerControl: string;
+  brokenAssumption: string;
+  possibleImpact: string;
+  validationSteps: string[];
+  patchDirection: string;
+  confidence: Confidence;
+}
+
+export interface ProofObligationSummary {
+  total: number;
+  satisfied: number;
+  partially_satisfied: number;
+  missing: number;
+  unknown: number;
+}
+
+export interface DeepAnalysisResult {
+  enabled: true;
+  proofObligations: ProofObligation[];
+  relationChecks: RelationCheckResult[];
+  proofObligationSummary: ProofObligationSummary;
+  taintFlows: TaintFlowPath[];
+  exploitHypotheses: ExploitHypothesis[];
 }

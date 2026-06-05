@@ -26,7 +26,7 @@ export async function scanTarget(target: string, options: ScanOptions = {}): Pro
   const rustFiles = await loadRustFiles(target, config.ignore);
   const parsed = circomFiles.map((file) => parseCircomFile(file.filePath, file.rawSource));
   const halo2Parsed = rustFiles.filter((file) => isLikelyHalo2Source(file.rawSource)).map((file) => parseHalo2File(file.filePath, file.rawSource));
-  const result = auditParsedFiles(target, parsed, { ...config, failOn, format }, halo2Parsed);
+  const result = auditParsedFiles(target, parsed, { ...config, failOn, format }, halo2Parsed, options.deep ?? false);
   const output = renderReport(result, format);
   if (options.out || options.report) {
     const outPath = options.out ?? defaultReportPath(format);
