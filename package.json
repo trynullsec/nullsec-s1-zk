@@ -15,7 +15,8 @@
     "dev": "tsx src/cli.ts",
     "test": "vitest run tests",
     "lint": "tsc -p tsconfig.json --noEmit",
-    "benchmark": "npm run build && node benchmarks/run.mjs"
+    "benchmark": "npm run build && node benchmarks/run.mjs",
+    "demo:orchard": "npm run build && node dist/cli.js scan ./benchmarks/historical/orchard-inspired --deep"
   },
   "keywords": [
     "zk",
