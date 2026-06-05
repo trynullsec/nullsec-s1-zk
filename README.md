@@ -1,7 +1,7 @@
 # Nullsec S1-ZK
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/trynullsec/nullsec-s1-zk/main/assets/nullsec-s1-zk-banner.png" width="100%" />
+  <img src="https://raw.githubusercontent.com/trynullsec/nullsec-s1-zk/main/assets/banner.png" width="100%" />
 </p>
 
 <p align="center">
