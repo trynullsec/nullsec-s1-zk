@@ -1,6 +1,6 @@
 {
   "name": "@trynullsec/s1-zk",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Nullsec S1-ZK: AI-native auditing for zero-knowledge circuits.",
   "type": "module",
   "bin": {
