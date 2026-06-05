@@ -30,10 +30,12 @@ export class Halo2ConstraintGraph {
     return this.model.assignments.find((node) => node.assignment === assignment);
   }
 
-  gatesForColumn(columnName: string | undefined): string[] {
+  gatesForColumn(columnName: string | undefined, file?: string): string[] {
     const normalized = normalizeHalo2Column(columnName);
     if (!normalized) return [];
-    return this.model.gates.filter((gate) => gate.adviceColumns.includes(normalized) || gate.instanceColumns.includes(normalized)).map((gate) => gate.gate.name);
+    return this.model.gates
+      .filter((gate) => (!file || gate.gate.file === file) && (gate.adviceColumns.includes(normalized) || gate.instanceColumns.includes(normalized)))
+      .map((gate) => gate.gate.name);
   }
 
   isAssignmentConnected(assignment: Halo2Assignment): boolean {
@@ -45,7 +47,7 @@ export class Halo2ConstraintGraph {
     if (!node) return [];
     const tokens = assignmentTokens(node);
     const connections = new Set<string>();
-    const columnGates = this.gatesForColumn(node.columnName);
+    const columnGates = this.gatesForColumn(node.columnName, assignment.file);
     for (const gateName of columnGates) connections.add(`gate:${gateName}`);
 
     for (const gate of this.model.gates.filter((candidate) => candidate.gate.file === assignment.file)) {

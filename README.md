@@ -190,23 +190,23 @@ Explain a rule:
 nullsec-zk explain NS-H2-005
 ```
 
-## Orchard-Inspired Benchmark
+## Orchard-Class Demo
 
-The repository includes synthetic Orchard-inspired Halo2 benchmarks under:
+This repository includes a synthetic Halo2 benchmark inspired by the public Zcash Orchard vulnerability disclosure. The benchmark does not contain Zcash source code and does not claim to reproduce the original exploit. It models the same family of risk: an elliptic-curve multiplication relation where assigned EC values are not fully bound into the constraint system.
+
+The demo lives under:
 
 ```text
 benchmarks/historical/orchard-inspired
 ```
 
-These examples are not copied from Zcash source. They are synthetic benchmark cases modeling the class of partial elliptic-curve underconstraint issues discussed publicly after the Orchard vulnerability disclosure.
-
-Nullsec S1-ZK does not claim to have found the real Zcash bug, and it does not prove Zcash or Orchard security. The benchmark exists to research the same family of underconstraint risk in a small, auditable fixture.
-
-Run it with deep analysis:
+Run:
 
 ```bash
 npx @trynullsec/s1-zk scan ./benchmarks/historical/orchard-inspired --deep
 ```
+
+Expected: S1-ZK flags the vulnerable synthetic gadget, identifies unconnected EC values, infers a partial EC multiplication proof obligation, and generates an exploit hypothesis.
 
 ## Benchmark
 

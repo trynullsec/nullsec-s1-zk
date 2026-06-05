@@ -27,8 +27,8 @@ describe("proof obligation extractor", () => {
   });
 
   it("detects EC multiplication obligations", () => {
-    const source = readFileSync("./benchmarks/historical/orchard-inspired/partial-ec-mul-halo2.rs", "utf8");
-    const obligations = extractProofObligations(halo2Context(source, "partial-ec-mul-halo2.rs"));
+    const source = readFileSync("./benchmarks/historical/orchard-inspired/vulnerable-ec-mul.rs", "utf8");
+    const obligations = extractProofObligations(halo2Context(source, "vulnerable-ec-mul.rs"));
     expect(obligations.some((obligation) => obligation.type === "ec_multiplication")).toBe(true);
   });
 });

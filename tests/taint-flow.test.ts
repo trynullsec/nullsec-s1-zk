@@ -14,8 +14,8 @@ describe("taint flow", () => {
   });
 
   it("tracks Halo2 EC outputs with constraint support", () => {
-    const source = readFileSync("./benchmarks/historical/orchard-inspired/partial-ec-mul-halo2.rs", "utf8");
-    const flows = analyzeTaintFlow(halo2Context(source, "partial-ec-mul-halo2.rs"));
-    expect(flows.some((flow) => flow.risk === "ec_unconnected_coordinate" && flow.sink.includes("base y") && !flow.constrained)).toBe(true);
+    const source = readFileSync("./benchmarks/historical/orchard-inspired/vulnerable-ec-mul.rs", "utf8");
+    const flows = analyzeTaintFlow(halo2Context(source, "vulnerable-ec-mul.rs"));
+    expect(flows.some((flow) => flow.risk === "ec_unconnected_coordinate" && flow.sink.includes("base point y") && !flow.constrained)).toBe(true);
   });
 });

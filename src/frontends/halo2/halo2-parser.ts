@@ -195,8 +195,9 @@ function extractAssignments(filePath: string, rawSource: string): Halo2Assignmen
     const match = lineText.match(/\b(assign_advice|assign_fixed)\s*\((.*)/);
     if (!match) return;
     const label = lineText.match(/\|\|\s*"([^"]+)"/)?.[1];
+    const assignmentArgs = lineText.match(/\bassign_(?:advice|fixed)\s*\(\s*\|\|\s*"[^"]+"\s*,\s*([^,]+)\s*,\s*([^,]+)/);
     const args = lineText.split(",");
-    const columnName = args.find((arg) => /config\.|\.advice|\.fixed|[A-Za-z_][A-Za-z0-9_]*\./.test(arg))?.trim();
+    const columnName = assignmentArgs?.[1]?.trim() ?? args.find((arg) => /config\.|\.advice|\.fixed/.test(arg))?.trim();
     const rowOffset = args.find((arg) => /^\s*\d+\s*$/.test(arg))?.trim();
     const cellVariable = lineText.match(/(?:let\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*.*assign_(?:advice|fixed)/)?.[1];
     assignments.push({

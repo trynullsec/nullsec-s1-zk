@@ -103,21 +103,26 @@ export function extractProofObligations(context: AuditContext): ProofObligation[
   });
 
   const halo2 = context.halo2;
-  if (halo2 && halo2.assignments.some((assignment) => /ec|curve|point|scalar|base|accumulator|output/i.test(`${assignment.label ?? ""} ${assignment.columnName ?? ""}`))) {
-    const first = halo2.assignments.find((assignment) => /ec|curve|point|scalar|base|accumulator|output/i.test(`${assignment.label ?? ""} ${assignment.columnName ?? ""}`));
-    const related = halo2.assignments
-      .filter((assignment) => assignment.file === first?.file && /base|scalar|point|accumulator|output|x|y/i.test(`${assignment.label ?? ""} ${assignment.columnName ?? ""}`))
-      .map((assignment) => assignment.label ?? assignment.columnName ?? "unknown");
-    obligations.push({
-      id: makeId("ec_multiplication", first?.file.split("/").pop() ?? "halo2-ec", obligations.length),
-      type: "ec_multiplication",
-      subject: first?.file.split("/").pop() ?? "Halo2 EC operation",
-      requiredInputs: related,
-      expectedRelation: "Output point should bind base point and scalar through complete elliptic-curve multiplication constraints.",
-      relatedSignals: related,
-      confidence: "MEDIUM",
-      sourceLocation: first ?? locationFallback("Halo2 EC operation")
-    });
+  if (halo2) {
+    const files = [...new Set(halo2.assignments.map((assignment) => assignment.file))];
+    for (const file of files) {
+      const fileAssignments = halo2.assignments.filter((assignment) => assignment.file === file);
+      if (!fileAssignments.some((assignment) => /ec|curve|point|scalar|base|accumulator|output/i.test(`${assignment.label ?? ""} ${assignment.columnName ?? ""}`))) continue;
+      const first = fileAssignments.find((assignment) => /ec|curve|point|scalar|base|accumulator|output/i.test(`${assignment.label ?? ""} ${assignment.columnName ?? ""}`));
+      const related = fileAssignments
+        .filter((assignment) => /base|scalar|point|accumulator|output|x|y/i.test(`${assignment.label ?? ""} ${assignment.columnName ?? ""}`))
+        .map((assignment) => assignment.label ?? assignment.columnName ?? "unknown");
+      obligations.push({
+        id: makeId("ec_multiplication", first?.file.split("/").pop() ?? "halo2-ec", obligations.length),
+        type: "ec_multiplication",
+        subject: first?.file.split("/").pop() ?? "Halo2 EC operation",
+        requiredInputs: related,
+        expectedRelation: "Output point should bind base point and scalar through complete elliptic-curve multiplication constraints.",
+        relatedSignals: related,
+        confidence: "MEDIUM",
+        sourceLocation: first ?? locationFallback("Halo2 EC operation")
+      });
+    }
   }
 
   return obligations;
