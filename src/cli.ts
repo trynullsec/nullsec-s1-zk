@@ -23,14 +23,16 @@ program
   .option("--out <path>", "write report output to a path")
   .option("--fail-on <severity>", "CRITICAL, HIGH, MEDIUM, LOW, or INFO")
   .option("--config <path>", "config file path")
-  .action(async (target: string, options: { format?: OutputFormat; report?: OutputFormat; out?: string; failOn?: string; config?: string }) => {
+  .option("--deep", "enable proof obligation, taint flow, and exploit hypothesis analysis")
+  .action(async (target: string, options: { format?: OutputFormat; report?: OutputFormat; out?: string; failOn?: string; config?: string; deep?: boolean }) => {
     try {
       const run = await scanTarget(target, {
         format: options.format,
         report: options.report,
         out: options.out,
         failOn: options.failOn ? normalizeSeverity(options.failOn, "CRITICAL") : undefined,
-        configPath: options.config
+        configPath: options.config,
+        deep: options.deep
       });
       if (!options.out && !options.report) process.stdout.write(run.output);
       process.exitCode = run.exitCode;
