@@ -6,6 +6,7 @@ import { ConstraintGraph } from "../ir/constraint-graph.js";
 import { runDeepAnalysis } from "../analysis/deep-analysis.js";
 import { allRules } from "../rules/index.js";
 import { summarizeIssues } from "../report/summary.js";
+import { VERSION } from "../version.js";
 import { RuleEngine } from "./rule-engine.js";
 
 function frontendName(circomCount: number, halo2Count: number): FrontendName {
@@ -22,7 +23,7 @@ export function auditParsedFiles(target: string, parsedFiles: ParsedCircuitFile[
   const context = { target, ir, graph, config, halo2 };
   const { issues, rulesExecuted } = engine.run(context);
   return {
-    tool: { name: "Nullsec S1-ZK", version: "1.0.0" },
+    tool: { name: "Nullsec S1-ZK", version: VERSION },
     target,
     frontend: frontendName(parsedFiles.length, halo2Files.length),
     filesScanned: parsedFiles.length + halo2Files.length,

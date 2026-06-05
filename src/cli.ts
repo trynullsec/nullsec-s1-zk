@@ -6,14 +6,15 @@ import { scanTarget } from "./scanner.js";
 import { writeDefaultConfig } from "./config.js";
 import { allRules } from "./rules/index.js";
 import { normalizeSeverity } from "./core/severity.js";
+import { VERSION } from "./version.js";
 import type { OutputFormat } from "./types.js";
 
 const program = new Command();
 
 program
   .name("nullsec-zk")
-  .description("Nullsec S1-ZK: AI-native auditing for zero-knowledge circuits.")
-  .version("1.0.0");
+  .description("Nullsec S1-ZK: deterministic, graph-aware static analysis for zero-knowledge circuits.")
+  .version(VERSION);
 
 program
   .command("scan")

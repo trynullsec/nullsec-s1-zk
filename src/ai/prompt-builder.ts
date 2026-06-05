@@ -1,6 +1,7 @@
 import type { Issue } from "../types.js";
 
 export function buildReasoningPrompt(issue: Issue, surroundingCode: string, circuitIntent = "Unknown from static analysis"): string {
+  const codeFenceLanguage = issue.ruleId.startsWith("NS-H2") ? "rust" : "circom";
   return `You are reviewing a zero-knowledge circuit issue reported by Nullsec S1-ZK.
 
 Circuit intent:
@@ -21,7 +22,7 @@ Impact:
 ${issue.impact}
 
 Surrounding code:
-\`\`\`circom
+\`\`\`${codeFenceLanguage}
 ${surroundingCode}
 \`\`\`
 

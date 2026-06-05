@@ -6,18 +6,20 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@trynullsec/s1-zk"><img src="https://img.shields.io/npm/v/@trynullsec/s1-zk?color=111827&label=npm" alt="npm version" /></a>
+  <a href="https://github.com/trynullsec/nullsec-s1-zk/actions/workflows/ci.yml"><img src="https://github.com/trynullsec/nullsec-s1-zk/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <img src="https://img.shields.io/badge/TypeScript-5.x-3178c6" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Circom-supported-16a34a" alt="Circom supported" />
-  <img src="https://img.shields.io/badge/Halo2-supported-7c3aed" alt="Halo2 supported" />
-  <img src="https://img.shields.io/badge/status-active-16a34a" alt="status active" />
+  <img src="https://img.shields.io/badge/Halo2-heuristic-7c3aed" alt="Halo2 heuristic" />
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license" />
 </p>
 
-**AI-native auditing for zero-knowledge circuits.**
+**Deterministic, graph-aware static analysis for zero-knowledge circuits.**
 
 Nullsec S1-ZK is an open-source security engine for zero-knowledge circuits.
 
 It analyzes Circom and Halo2 circuits, builds constraint graphs, infers proof obligations, and generates exploit hypotheses for underconstraint risks.
+
+S1-ZK is fully local and deterministic. It sends no code to external services. LLM-assisted reasoning is planned, but not required by the current engine.
 
 **Find underconstraints before they mint infinite money.**
 
@@ -36,6 +38,13 @@ Nullsec S1-ZK is built around one question:
 The tool is designed for ZK auditors, protocol engineers, security researchers, and crypto developers who need fast, deterministic signal on underconstraints, unsafe witness assignments, missing public bindings, selector mistakes, incomplete EC relations, and other soundness risks.
 
 ## Supported Frontends
+
+| Frontend | Status | Notes |
+| --- | --- | --- |
+| Circom | Full | Tokenizer, parser, constraint graph, rule coverage |
+| Halo2-style Rust | Heuristic | Pattern/dataflow based; no full Rust AST yet |
+| Noir | Planned | Adapter stub only |
+| gnark | Planned | Adapter stub only |
 
 ### Circom
 
@@ -138,14 +147,21 @@ Target: ./examples
 Frontend: Mixed
 Files scanned: 24
 Rules executed: 18
-Issues found: 33
+Issues found: 34
 
 Severity summary:
 CRITICAL  2
-HIGH      12
-MEDIUM    15
-LOW       4
-INFO      0
+HIGH      20
+MEDIUM    8
+LOW       3
+INFO      1
+
+Proof obligations:
+Total      68
+Satisfied  59
+Partial    0
+Missing    9
+Unknown    0
 ```
 
 ## Rule Coverage
@@ -184,6 +200,33 @@ Run it with deep analysis:
 ```bash
 npx @trynullsec/s1-zk scan ./benchmarks/historical/orchard-inspired --deep
 ```
+
+## Benchmark
+
+Run the bundled regression corpus:
+
+```bash
+npm run benchmark
+```
+
+Current output:
+
+```text
+vuln=14 safe=10 TP=13 FN=1 TN=10 FP=0
+precision=100.00% recall=92.86% false_safe_rate=7.14% false_positive_rate=0.00%
+MISSED: examples/halo2/vulnerable/missing-selector-booleanity.rs
+```
+
+| Metric | Value |
+| --- | ---: |
+| False-safe rate | 7.14% |
+| False-positive rate | 0.00% |
+| Precision | 100.00% |
+| Recall | 92.86% |
+
+Bundled corpus size is small and intentionally synthetic. These numbers are regression signals for this repository, not a general claim about all ZK circuits.
+
+Known miss: `examples/halo2/vulnerable/missing-selector-booleanity.rs`. Selector-booleanity detection for this fixture is not yet covered by `NS-H2-003`.
 
 ## Reports
 

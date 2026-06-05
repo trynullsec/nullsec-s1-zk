@@ -1,7 +1,7 @@
 {
   "name": "@trynullsec/s1-zk",
   "version": "1.0.5",
-  "description": "Nullsec S1-ZK: AI-native auditing for zero-knowledge circuits.",
+  "description": "Deterministic, graph-aware static analysis for zero-knowledge circuits.",
   "type": "module",
   "bin": {
     "nullsec-zk": "dist/cli.js"
@@ -10,10 +10,12 @@
     ".": "./dist/index.js"
   },
   "scripts": {
+    "prebuild": "node scripts/sync-version.mjs",
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/cli.ts",
     "test": "vitest run tests",
-    "lint": "tsc -p tsconfig.json --noEmit"
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "benchmark": "npm run build && node benchmarks/run.mjs"
   },
   "keywords": [
     "zk",
@@ -51,6 +53,9 @@
     "dist",
     "README.md",
     "LICENSE",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "CHANGELOG.md",
     "RULES.md",
     "LIMITATIONS.md",
     "ROADMAP.md",
