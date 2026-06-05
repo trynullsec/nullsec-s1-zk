@@ -1,22 +1,31 @@
 import { buildCircuitIR } from "../frontends/circom/circom-ir-builder.js";
+import { buildHalo2IR } from "../frontends/halo2/halo2-ir-builder.js";
 import { ConstraintGraph } from "../ir/constraint-graph.js";
 import { allRules } from "../rules/index.js";
 import { summarizeIssues } from "../report/summary.js";
 import { RuleEngine } from "./rule-engine.js";
-export function auditParsedFiles(target, parsedFiles, config) {
+function frontendName(circomCount, halo2Count) {
+    if (circomCount > 0 && halo2Count > 0)
+        return "Mixed";
+    if (halo2Count > 0)
+        return "Halo2";
+    return "Circom";
+}
+export function auditParsedFiles(target, parsedFiles, config, halo2Files = []) {
     const ir = buildCircuitIR(parsedFiles);
+    const halo2 = buildHalo2IR(halo2Files);
     const graph = new ConstraintGraph(ir);
     const engine = new RuleEngine(allRules);
-    const { issues, rulesExecuted } = engine.run({ target, ir, graph, config });
+    const { issues, rulesExecuted } = engine.run({ target, ir, graph, config, halo2 });
     return {
         tool: { name: "Nullsec S1-ZK", version: "1.0.0" },
         target,
-        frontend: "Circom",
-        filesScanned: parsedFiles.length,
+        frontend: frontendName(parsedFiles.length, halo2Files.length),
+        filesScanned: parsedFiles.length + halo2Files.length,
         rulesExecuted,
         summary: summarizeIssues(issues),
         issues,
-        parserWarnings: ir.parserWarnings
+        parserWarnings: [...ir.parserWarnings, ...halo2.parserWarnings]
     };
 }
 //# sourceMappingURL=audit-engine.js.map

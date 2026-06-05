@@ -5,6 +5,7 @@ export type SignalVisibility = "public" | "private" | "unknown";
 export type AssignmentOperator = "<--" | "<==";
 export type ConstraintOperator = "===" | "<==";
 export type OutputFormat = "terminal" | "json" | "markdown" | "sarif";
+export type FrontendName = "Circom" | "Halo2" | "Mixed";
 
 export interface SourceLocation {
   file: string;
@@ -135,6 +136,7 @@ export interface AuditContext {
   ir: CircuitIR;
   graph: ConstraintGraphLike;
   config: NullsecConfig;
+  halo2?: import("./frontends/halo2/halo2-types.js").Halo2IR;
 }
 
 export interface ConstraintGraphLike {
@@ -172,7 +174,7 @@ export interface AuditResult {
     version: string;
   };
   target: string;
-  frontend: "Circom";
+  frontend: FrontendName;
   filesScanned: number;
   rulesExecuted: number;
   summary: AuditSummary;

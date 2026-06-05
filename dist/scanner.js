@@ -1,9 +1,11 @@
 import { writeFile } from "node:fs/promises";
 import { loadConfig } from "./config.js";
 import { auditParsedFiles } from "./core/audit-engine.js";
-import { loadCircomFiles } from "./core/file-loader.js";
+import { loadCircomFiles, loadRustFiles } from "./core/file-loader.js";
 import { isAtOrAbove, normalizeSeverity } from "./core/severity.js";
 import { parseCircomFile } from "./frontends/circom/circom-parser.js";
+import { parseHalo2File } from "./frontends/halo2/halo2-parser.js";
+import { isLikelyHalo2Source } from "./frontends/halo2/halo2-patterns.js";
 import { renderJsonReport } from "./report/json.js";
 import { renderMarkdownReport } from "./report/markdown.js";
 import { renderSarifReport } from "./report/sarif.js";
@@ -12,9 +14,11 @@ export async function scanTarget(target, options = {}) {
     const config = loadConfig(process.cwd(), options.configPath);
     const format = options.format ?? options.report ?? config.format;
     const failOn = normalizeSeverity(options.failOn, config.failOn);
-    const files = await loadCircomFiles(target, config.ignore);
-    const parsed = files.map((file) => parseCircomFile(file.filePath, file.rawSource));
-    const result = auditParsedFiles(target, parsed, { ...config, failOn, format });
+    const circomFiles = await loadCircomFiles(target, config.ignore);
+    const rustFiles = await loadRustFiles(target, config.ignore);
+    const parsed = circomFiles.map((file) => parseCircomFile(file.filePath, file.rawSource));
+    const halo2Parsed = rustFiles.filter((file) => isLikelyHalo2Source(file.rawSource)).map((file) => parseHalo2File(file.filePath, file.rawSource));
+    const result = auditParsedFiles(target, parsed, { ...config, failOn, format }, halo2Parsed);
     const output = renderReport(result, format);
     if (options.out || options.report) {
         const outPath = options.out ?? defaultReportPath(format);

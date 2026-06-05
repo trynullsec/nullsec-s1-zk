@@ -155,3 +155,75 @@ Vulnerable: `out <== selector * a + (1 - selector) * b;`
 Safe: `selector * (selector - 1) === 0;`
 
 Limitations: Selector naming and multiplexer detection are heuristic.
+
+## NS-H2-001 Assigned Advice Not Constrained
+
+Severity: HIGH or CRITICAL depending context.
+
+Detects Halo2 `assign_advice` calls that do not appear connected through the Halo2 constraint graph to parsed `create_gate` expressions, equality edges, copy constraints, `constrain_instance`, or lookups.
+
+Vulnerable: assigning an advice cell in a region without referencing it in a gate or equality/public binding.
+
+Safe: reference the assigned cell in a gate, lookup, copy constraint, or instance exposure as intended.
+
+Limitations: This is graph-aware Rust source scanning, not full Halo2 synthesis tracing.
+
+## NS-H2-002 Instance Value Not Bound
+
+Severity: HIGH.
+
+Detects `query_instance` usage that is not connected through a gate expression or public instance binding.
+
+Vulnerable: querying or intending to use a public instance value without connecting an assigned cell to the public statement.
+
+Safe: use `layouter.constrain_instance(cell.cell(), config.instance, row)`.
+
+Limitations: Cross-file helper abstractions may require suppression or future interprocedural analysis.
+
+## NS-H2-003 Selector Discipline Risk
+
+Severity: MEDIUM or HIGH.
+
+Detects selectors queried in gates, especially selector multipliers, without clear `.enable(...)` usage in parsed regions.
+
+Vulnerable: `meta.query_selector(q_gate)` appears in a gate, but no region enables `q_gate`.
+
+Safe: enable the selector on every row where the gate must apply.
+
+Limitations: Complex selector abstractions may not be recognized.
+
+## NS-H2-004 Unsafe Inverse Or Division
+
+Severity: HIGH.
+
+Detects `.invert()`, `.inverse()`, or division-like code without an obvious nearby zero check, nonzero guard, safe gadget, or inverse relation. Apparent safe patterns are downgraded for review instead of treated as fully proven safe.
+
+Vulnerable: `let inv = denominator.invert().unwrap();`
+
+Safe: guard zero explicitly and constrain the inverse relation in a gate.
+
+Limitations: The guard detector is local and heuristic.
+
+## NS-H2-005 Partial Elliptic-Curve Operation Risk
+
+Severity: HIGH, confidence MEDIUM unless obvious.
+
+Detects EC-related assignments involving names like `curve`, `point`, `scalar`, `base`, `fixed_base`, `variable_base`, `ecc`, or `mul` that are not connected to gate expressions, equality edges, copy constraints, lookups, or public instance bindings.
+
+Vulnerable: assigning EC point coordinates from a scalar multiplication without constraining the group law.
+
+Safe: bind every EC intermediate through complete gate constraints, lookups, or equality constraints.
+
+Limitations: This rule is intentionally conservative for Orchard-class research and may require project-specific tuning.
+
+## NS-H2-006 Missing Enable Equality
+
+Severity: MEDIUM.
+
+Detects `constrain_equal` usage where the graph cannot connect the copy constraint to a parsed column with obvious `meta.enable_equality(...)`.
+
+Vulnerable: calling `constrain_equal` on cells from columns not configured for equality.
+
+Safe: call `meta.enable_equality` for advice or instance columns participating in copy constraints.
+
+Limitations: The rule depends on local column extraction and may miss wrapper APIs.

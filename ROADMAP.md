@@ -2,7 +2,9 @@
 
 Nullsec S1-ZK is designed as a modular security product foundation.
 
-- Halo2 frontend.
+- Deeper Halo2 frontend with Rust AST support, macro-aware extraction, and synthesis tracing.
+- Rust AST parsing via `syn`.
+- Real Halo2 region and gadget semantic models.
 - Noir frontend.
 - gnark frontend.
 - Plonky2 frontend.

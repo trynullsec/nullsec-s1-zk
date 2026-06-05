@@ -8,10 +8,10 @@ export interface LoadedFile {
   rawSource: string;
 }
 
-export async function loadCircomFiles(target: string, ignore: string[] = []): Promise<LoadedFile[]> {
+async function loadFilesByExtension(target: string, extensions: string[], ignore: string[] = []): Promise<LoadedFile[]> {
   const absoluteTarget = resolve(process.cwd(), target);
   const stat = statSync(absoluteTarget);
-  const patterns = stat.isDirectory() ? ["**/*.circom"] : [absoluteTarget];
+  const patterns = stat.isDirectory() ? extensions.map((extension) => `**/*${extension}`) : [absoluteTarget];
   const cwd = stat.isDirectory() ? absoluteTarget : process.cwd();
   const entries = await fg(patterns, {
     cwd,
@@ -20,11 +20,19 @@ export async function loadCircomFiles(target: string, ignore: string[] = []): Pr
     ignore: ignore.map((entry) => `**/${entry}/**`)
   });
 
-  const unique = [...new Set(entries)].filter((file) => file.endsWith(".circom"));
+  const unique = [...new Set(entries)].filter((file) => extensions.some((extension) => file.endsWith(extension)));
   return Promise.all(
     unique.sort().map(async (filePath) => ({
       filePath,
       rawSource: await readFile(filePath, "utf8")
     }))
   );
+}
+
+export async function loadCircomFiles(target: string, ignore: string[] = []): Promise<LoadedFile[]> {
+  return loadFilesByExtension(target, [".circom"], ignore);
+}
+
+export async function loadRustFiles(target: string, ignore: string[] = []): Promise<LoadedFile[]> {
+  return loadFilesByExtension(target, [".rs"], ignore);
 }

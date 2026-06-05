@@ -48,7 +48,7 @@ program.command("rules").description("List supported Nullsec S1-ZK rules").actio
 });
 
 program.command("explain").argument("<issue-id>", "Rule ID or issue ID").description("Explain a supported rule").action((issueId: string) => {
-  const ruleId = issueId.match(/NS-ZK-\d{3}/)?.[0] ?? issueId;
+  const ruleId = issueId.match(/NS-(?:ZK|H2)-\d{3}/)?.[0] ?? issueId;
   const rule = allRules.find((candidate) => candidate.id === ruleId);
   if (!rule) {
     console.error(`No rule found for ${issueId}`);

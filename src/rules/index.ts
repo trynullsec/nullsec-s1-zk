@@ -11,6 +11,12 @@ import { unconstrainedComponentOutputRule } from "./NS-ZK-009-unconstrained-comp
 import { aliasOverflowRiskRule } from "./NS-ZK-010-alias-overflow-risk.js";
 import { unusedSignalRule } from "./NS-ZK-011-unused-signal.js";
 import { suspiciousSelectorRule } from "./NS-ZK-012-suspicious-selector.js";
+import { halo2AssignedAdviceNotConstrainedRule } from "./halo2/NS-H2-001-assigned-advice-not-constrained.js";
+import { halo2InstanceNotBoundRule } from "./halo2/NS-H2-002-instance-not-bound.js";
+import { halo2SelectorRiskRule } from "./halo2/NS-H2-003-selector-risk.js";
+import { halo2UnsafeInverseRule } from "./halo2/NS-H2-004-unsafe-inverse.js";
+import { halo2PartialEcOperationRule } from "./halo2/NS-H2-005-partial-ec-operation.js";
+import { halo2MissingEnableEqualityRule } from "./halo2/NS-H2-006-missing-enable-equality.js";
 
 export const allRules: Rule[] = [
   dangerousHintAssignmentRule,
@@ -24,5 +30,11 @@ export const allRules: Rule[] = [
   unconstrainedComponentOutputRule,
   aliasOverflowRiskRule,
   unusedSignalRule,
-  suspiciousSelectorRule
+  suspiciousSelectorRule,
+  halo2AssignedAdviceNotConstrainedRule,
+  halo2InstanceNotBoundRule,
+  halo2SelectorRiskRule,
+  halo2UnsafeInverseRule,
+  halo2PartialEcOperationRule,
+  halo2MissingEnableEqualityRule
 ];
