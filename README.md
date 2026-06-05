@@ -1,12 +1,11 @@
 # Nullsec S1-ZK
 
 <p align="center">
-  <img src="./assets/banner.png" width="100%" />
+  <img src="https://raw.githubusercontent.com/trynullsec/nullsec-s1-zk/main/assets/nullsec-s1-zk-banner.png" width="100%" />
 </p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@trynullsec/s1-zk"><img src="https://img.shields.io/npm/v/@trynullsec/s1-zk?color=111827&label=npm" alt="npm version" /></a>
-  <a href="https://www.npmjs.com/package/@trynullsec/s1-zk"><img src="https://img.shields.io/npm/dm/@trynullsec/s1-zk?color=111827&label=downloads" alt="npm downloads" /></a>
   <img src="https://img.shields.io/badge/TypeScript-5.x-3178c6" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Circom-supported-16a34a" alt="Circom supported" />
   <img src="https://img.shields.io/badge/Halo2-supported-7c3aed" alt="Halo2 supported" />
@@ -16,7 +15,9 @@
 
 **AI-native auditing for zero-knowledge circuits.**
 
-Nullsec S1-ZK is a static analysis engine for zero-knowledge circuits. It audits what a circuit actually constrains, not just what it claims to prove.
+Nullsec S1-ZK is an open-source security engine for zero-knowledge circuits.
+
+It analyzes Circom and Halo2 circuits, builds constraint graphs, infers proof obligations, and generates exploit hypotheses for underconstraint risks.
 
 **Find underconstraints before they mint infinite money.**
 
