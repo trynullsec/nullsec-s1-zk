@@ -1,6 +1,6 @@
 {
   "name": "@trynullsec/s1-zk",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Deterministic, graph-aware static analysis for zero-knowledge circuits.",
   "type": "module",
   "bin": {
