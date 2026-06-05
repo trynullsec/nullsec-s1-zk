@@ -1,10 +1,10 @@
 {
-  "name": "nullsec-s1-zk",
+  "name": "@trynullsec/s1-zk",
   "version": "1.0.0",
   "description": "Nullsec S1-ZK: AI-native auditing for zero-knowledge circuits.",
   "type": "module",
   "bin": {
-    "nullsec-zk": "./dist/cli.js"
+    "nullsec-zk": "dist/cli.js"
   },
   "exports": {
     ".": "./dist/index.js"
@@ -33,5 +33,14 @@
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.14"
-  }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "RULES.md",
+    "LIMITATIONS.md",
+    "ROADMAP.md",
+    "examples",
+    "benchmarks"
+  ]
 }
