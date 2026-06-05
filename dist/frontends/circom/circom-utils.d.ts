@@ -1,9 +1,0 @@
-export declare function normalizeSignalReference(reference: string): string;
-export declare function baseSignalName(reference: string): string;
-export declare function extractSignalReferences(expression: string): string[];
-export declare function isBooleanLikeName(name: string): boolean;
-export declare function isSelectorLikeName(name: string): boolean;
-export declare function isNumericLikeName(name: string): boolean;
-export declare function isHighValueNumericName(name: string): boolean;
-export declare function expressionHasDivisionOrInverse(expression: string): boolean;
-export declare function expressionHasHashContext(expression: string): boolean;
