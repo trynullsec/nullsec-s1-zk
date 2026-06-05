@@ -1,0 +1,37 @@
+{
+  "name": "nullsec-s1-zk",
+  "version": "1.0.0",
+  "description": "Nullsec S1-ZK: AI-native auditing for zero-knowledge circuits.",
+  "type": "module",
+  "bin": {
+    "nullsec-zk": "./dist/cli.js"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/cli.ts",
+    "test": "vitest run tests",
+    "lint": "tsc -p tsconfig.json --noEmit"
+  },
+  "keywords": [
+    "zk",
+    "circom",
+    "security",
+    "static-analysis",
+    "auditing"
+  ],
+  "license": "UNLICENSED",
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "commander": "^14.0.2",
+    "fast-glob": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.14"
+  }
+}

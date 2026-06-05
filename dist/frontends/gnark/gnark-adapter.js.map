@@ -1,0 +1,1 @@
+{"version":3,"file":"gnark-adapter.js","sourceRoot":"","sources":["../../../src/frontends/gnark/gnark-adapter.ts"],"names":[],"mappings":"AAKA,MAAM,CAAC,MAAM,YAAY,GAAiB;IACxC,QAAQ,EAAE,OAAO;IACjB,KAAK;QACH,MAAM,IAAI,KAAK,CAAC,sDAAsD,CAAC,CAAC;IAC1E,CAAC;CACF,CAAC"}
