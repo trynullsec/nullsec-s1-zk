@@ -104,21 +104,31 @@ export class ConstraintGraph {
     });
   }
 
-  hasRangeCheck(signalName: string): boolean {
+  hasRangeCheck(signalName: string, templateName?: string): boolean {
     const rangePattern = /Num2Bits|Bits2Num|LessThan|LessEqThan|GreaterThan|GreaterEqThan|RangeCheck|rangeCheck|Decompose|AliasCheck|bits?\[/;
-    const rangeComponentNames = new Set(
-      this.ir.components.filter((component) => rangePattern.test(`${component.templateType ?? ""}${component.name}`)).map((component) => component.name)
+    const inScope = <T extends { templateName?: string }>(node: T): boolean =>
+      !templateName || !node.templateName || node.templateName === templateName;
+    const rangeComponents = this.ir.components.filter(
+      (component) => inScope(component) && rangePattern.test(`${component.templateType ?? ""}${component.name}`)
     );
+    const rangeComponentNames = new Set(rangeComponents.map((component) => component.name));
+
     return (
-      this.ir.components.some((component) => rangePattern.test(`${component.templateType ?? ""}${component.name}`) && component.inputs.some((input) => expressionMentionsSignal(input, signalName))) ||
+      rangeComponents.some((component) => component.inputs.some((input) => expressionMentionsSignal(input, signalName))) ||
       this.ir.constraints.some(
         (constraint) =>
+          inScope(constraint) &&
           constraint.lhs !== undefined &&
           rangeComponentNames.has(constraint.lhs.split(".")[0] ?? "") &&
           constraint.referencedSignals.some((ref) => namesEquivalent(ref, signalName))
       ) ||
-      this.ir.constraints.some((constraint) => rangePattern.test(constraint.expression) && expressionMentionsSignal(constraint.expression, signalName)) ||
-      this.ir.assignments.some((assignment) => rangePattern.test(`${assignment.rhs} ${assignment.lhs}`) && assignment.referencedSignals.some((ref) => namesEquivalent(ref, signalName)))
+      this.ir.constraints.some(
+        (constraint) => inScope(constraint) && rangePattern.test(constraint.expression) && expressionMentionsSignal(constraint.expression, signalName)
+      ) ||
+      this.ir.assignments.some(
+        (assignment) =>
+          inScope(assignment) && rangePattern.test(`${assignment.rhs} ${assignment.lhs}`) && assignment.referencedSignals.some((ref) => namesEquivalent(ref, signalName))
+      )
     );
   }
 

@@ -135,7 +135,7 @@ export interface ConstraintGraphLike {
     unboundInputs(): SignalDeclaration[];
     unconstrainedOutputs(): SignalDeclaration[];
     hasBooleanityConstraint(signalName: string): boolean;
-    hasRangeCheck(signalName: string): boolean;
+    hasRangeCheck(signalName: string, templateName?: string): boolean;
     isComponentOutputReference(reference: string): boolean;
     isComponentOutputConstrained(reference: string): boolean;
     signalReferences(signalName: string): SourceLocation[];

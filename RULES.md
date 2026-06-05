@@ -64,15 +64,25 @@ Limitations: Naming heuristics can produce false positives or miss domain-specif
 
 ## NS-ZK-006 Missing Range Check
 
-Severity: MEDIUM by default, HIGH for high-value inputs/outputs.
+Severity: confidence-scored and context-aware.
 
-Detects numeric-like names such as `amount`, `balance`, `nonce`, `limb`, `nullifier`, and `root` without obvious range-check patterns.
+Primary targets: `amount`, `balance`, `fee`, `nonce`, `index`, `timestamp`, `quantity`, `count`, `size`, and `limb`.
 
-Vulnerable: `remaining <== balance - amount;`
+The rule distinguishes bounded integers from hash-like values such as `nullifierHash`, `commitment`, and Merkle `root` signals. Hash outputs, commitments, roots, and nullifier hashes are not automatically required to have range checks unless they are used as bounded integers in arithmetic or comparators.
+
+Confidence examples:
+
+- `amount` input without range check: HIGH confidence, HIGH severity
+- `balance` input without range check: HIGH confidence, HIGH severity
+- `nullifierHash` equality binding: not reported
+- `commitment` from Poseidon output: not reported
+- `remainingBalance` with range-checked operands: not reported
+
+Vulnerable: `remaining <== balance - amount;` flags `amount` and `balance` inputs.
 
 Safe: `component bits = Num2Bits(64); bits.in <== amount;`
 
-Limitations: It recognizes common range gadgets and patterns, not every custom range proof.
+Limitations: Classification is heuristic. It recognizes common range gadgets and patterns, not every custom range proof or protocol-specific integer encoding.
 
 ## NS-ZK-007 Unsafe Assertion
 

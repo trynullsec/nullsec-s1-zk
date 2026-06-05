@@ -5,6 +5,9 @@ template SafeBoolean() {
   signal input balance;
   signal output allowedAmount;
 
+  component balanceBits = Num2Bits(64);
+  balanceBits.in <== balance;
+
   isAdmin * (isAdmin - 1) === 0;
   allowedAmount <== isAdmin * balance;
 }
