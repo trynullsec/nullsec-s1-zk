@@ -124,9 +124,16 @@ nullsec-zk scan ./circuits
 nullsec-zk scan ./circuits --deep
 nullsec-zk scan ./circuits --format json
 nullsec-zk scan ./circuits --report markdown
+nullsec-zk scan ./circuits --deep --no-banner
 nullsec-zk rules
 nullsec-zk explain NS-H2-005
 nullsec-zk init
+```
+
+Use `--no-banner` for machine-readable logs or minimal terminal output:
+
+```bash
+nullsec-zk scan ./circuits --deep --no-banner
 ```
 
 The same commands work through `npx`:
