@@ -17,12 +17,25 @@
   },
   "keywords": [
     "zk",
+    "zero-knowledge",
     "circom",
+    "halo2",
     "security",
     "static-analysis",
-    "auditing"
+    "circuits",
+    "audit",
+    "cryptography",
+    "proof-systems"
   ],
-  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trynullsec/nullsec-s1-zk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/trynullsec/nullsec-s1-zk/issues"
+  },
+  "homepage": "https://github.com/trynullsec/nullsec-s1-zk#readme",
+  "license": "MIT",
   "dependencies": {
     "chalk": "^5.6.2",
     "commander": "^14.0.2",
@@ -37,9 +50,11 @@
   "files": [
     "dist",
     "README.md",
+    "LICENSE",
     "RULES.md",
     "LIMITATIONS.md",
     "ROADMAP.md",
+    "assets",
     "examples",
     "benchmarks"
   ]
